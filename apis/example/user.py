@@ -1,12 +1,14 @@
 from flask_restful import Resource
+from common.return_data import get_return_data, Success
+import json
 
 
 class UserViewSet(Resource):
 
     def get(self):
         user_info = {
-            "name": "张三",
+            "name": "admin",
             "age": 22,
-            "sex": "男"
+            "sex": "man"
         }
-        return user_info
+        return get_return_data(Success, user_info)
