@@ -45,9 +45,9 @@
   + ```json
     {
     "api_version": "v1",
-    "production": "ResearchPlatform",
+    "production": "MicroservicePlatform",
     "app_version": "v0.0.1",
-    "application": "ResearchManagement",
+    "application": "flask-example",
     "platform": "Linux-5.10.18-amd64-desktop-x86_64-with-Deepin-20.2.1-apricot"
     }
     ```
@@ -83,8 +83,8 @@
 ### Docker
 **主程序：**
 ```bash
-$ docker build . -t research_management:v1.0.0
-$ docker run --rm -p 8000:8000  -e "ENVIRONMENT=testing" -e "CONSUL_HOST=127.0.0.1"  research_management:v1.0.0
+$  sudo docker build -f ./deploy/Dockerfile  -t flask_example:v1.0.0 .
+$ docker run --rm -p 8000:8000  -e "ENVIRONMENT=testing"   flask_example:v1.0.0
 ```
 
 **redis：**
@@ -94,14 +94,10 @@ $ docker run --rm -p 6379:6379 --name my-redis redis
 
 ### 接口测试
 ```
-$ http http://127.0.0.1:8000/api/v1/version
-$ http POST :8000/api/v2/quotes author="Tim Peters" content="Beautiful is better than ugly."
-$ http POST :8000/api/v2/quotes author="Tim Peters" content="Now is better than never."
-$ http POST :8000/api/v2/quotes author="Peter Hintjens" content="Simplicity is always better than functionality."
-$ http http://127.0.0.1:8000/api/v2/quotes
+$ http http://127.0.0.1:8000/api/example_api/version
 
 # 异步任务
-$ http http://127.0.0.1:8000/api/v1/task/add
+$ http http://127.0.0.1:8000/api/example_api/task/add
 ```
 
 ### 数据库迁移
@@ -171,8 +167,6 @@ $ python manage.py runserver
 - session     每个 session 只运行一次，在自动化测试时，登录步骤可以使用该 session
 
 
-## websocker run  0.0.0.0:5678
-python mywebsocket/main.py 
 ## celery run
 `celery -A  manage.celery worker --loglevel=debug`
 - [前台运行] celery worker -A manage.celery --loglevel=debug
@@ -181,35 +175,10 @@ python mywebsocket/main.py
 
 ## 部署服务详细步骤
 ### 启动后端服务
-```shell script
-sh ./deploy/start_backend_server.sh
-```
-> 说明： 需要暴露端口
-### 启动celery服务
-```shell script
-sh ./deploy/start_celery_server.sh
-```
-### 启动rabbitmq 消费者服务
-```shell script
-sh ./deploy/start_rabbitmq_client.sh
-```
-### 启动websocket服务
-```shell script
-sh ./deploy/websocket_server.sh
-```
-> 需要暴露端口 5678:5678
-### 启动celery 任务结果查看服务
-```shell script
-sh ./deploy/start_celery_task_result.sh
-```
-> 需要暴露端口 5555:5555
-> 访问地址：http://10.31.0.184:5555/tasks
 
-### 创建默认数据
 ```shell script
-sh ./deploy/prepare_base_data.sh
+sh ./deploy/start_server.sh
 ```
-
 
 
 
