@@ -1,11 +1,18 @@
 from flask import Flask
-from conf import config
 from flask_cors import CORS
 from flask_script import Manager, Server
 from flask_jwt_extended import jwt_required
 from flask import request, jsonify
 from apis import API_VERSION_MAPPING, VERSIONS_ALLOWED
 from common.return_data import TokenInvalid, get_return_data
+from conf import celeryconfig
+from common.extensions import celery, db, main_app_create_engine
+from flask_jwt_extended import JWTManager
+from middleware.global_middleware import RequestFilter
+from conf.config import BaseConfig
+from common.log_handler import LogHandler
+from conf.config import config_mapping
+import os
 
 TOKEN_ERROR_INFO = ['Signature verification failed', 'Invalid crypto padding', 'Token has expired']
 
@@ -29,11 +36,56 @@ def _registry_blueprint(app):
         app.register_blueprint(blueprint=API_VERSION_MAPPING[blueprint], url_prefix=_get_url_prefix(blueprint))
 
 
-def create_app():
+def init_celery(app, celery):
+    """
+    :param app:
+    :param celery:
+    :return:
+    """
+    celery.config_from_object(celeryconfig)
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
+
+
+def create_test_data():
+    """
+    insert test data
+    :return:
+    """
+    with main_app_create_engine.connect() as con:
+        con.execute('INSERT INTO user (username, age, sex,  is_delete)VALUES ("李白", 20, "男", 0)')
+
+
+def create_app(env_name):
+    """应用工厂方法
+    :param env_name  environment name
+    :return: flask_app
+    """
     app = Flask(__name__)
-    app.config.from_object(config.BaseConfig)
+    app.config.from_object(config_mapping[env_name])
     _register_extensions(app)
     _registry_blueprint(app)
+    init_celery(app, celery)
+
+    # Init SQLAlchemy
+    if BaseConfig.ENV == 'testing':
+        with app.app_context():
+            db.init_app(app)
+            db.create_all()
+            create_test_data()
+
+    # NO DEBUG MODE RUN
+    if not app.debug:
+        LogHandler(app)
     return app
 
 
@@ -42,7 +94,7 @@ def _verify_token():
     pass
 
 
-app = create_app()
+app = create_app(os.getenv('ENVIRONMENT', 'testing'))
 
 
 @app.before_request
@@ -64,16 +116,19 @@ def before_request():
 
 @app.after_request
 def after_request(response):
-    # print("----after_request----")
     resp = response.json
-    # 必须返回response参数
     msg = resp.get('msg', None) if resp else None
     if msg in TOKEN_ERROR_INFO:
         return jsonify(get_return_data(TokenInvalid, {}, msg))
     return response
 
 
+# use Manage management app
 manager = Manager(app)
+# use JWTManager management JWT
+jwt = JWTManager(app)
+# Init middleware
+app.wsgi_app = RequestFilter(app.wsgi_app)
 manager.add_command('runserver', Server(host=app.config['SERVER_HOST'],
                                         port=app.config['SERVER_PORT'],
                                         use_debugger=app.config['DEBUG'], use_reloader=app.config['USE_RELOADER']))
