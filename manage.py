@@ -1,7 +1,7 @@
 from flask import Flask
-from conf.config import BaseConfig
+from conf import config
 from flask_cors import CORS
-from flask_script import Manager
+from flask_script import Manager, Server
 from apis import API_VERSION_MAPPING, VERSIONS_ALLOWED
 
 
@@ -26,7 +26,7 @@ def _registry_blueprint(app):
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(BaseConfig)
+    app.config.from_object(config.BaseConfig)
     _register_extensions(app)
     _registry_blueprint(app)
     return app
@@ -34,6 +34,10 @@ def create_app():
 
 app = create_app()
 manager = Manager(app)
+
+manager.add_command('runserver', Server(host=app.config['SERVER_HOST'],
+                                        port=app.config['SERVER_PORT'],
+                                        use_debugger=app.config['DEBUG'], use_reloader=app.config['USE_RELOADER']))
 
 if __name__ == '__main__':
     manager.run()

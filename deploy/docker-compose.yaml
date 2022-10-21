@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  backend:
+    restart: always
+    container_name: flask_example
+    image: lifangjunone/flask_example:v1.0.0
+    command: /bin/bash -c /usr/src/backend/deploy/start_server.sh
+    tty: true
+    ports:
+      - "8000:8000"
+    volumes:
+      - /tmp/flask_example/:/usr/scr/backend/
+    environment:
+      - TZ=Asia/Shanghai
+      - ENVIRONMENT=development
+      - CURRENT_VERSION=${CURRENT_VERSION}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PORT=${MYSQL_PORT}
