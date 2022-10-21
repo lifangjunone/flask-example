@@ -92,7 +92,7 @@ class DevelopmentConfig(BaseConfig):
 
 
 class TestingConfig(BaseConfig):
-    DEBUG = False
+    DEBUG = True
     TESTING = True
     # ------------------------------
     # 数据库连接配置

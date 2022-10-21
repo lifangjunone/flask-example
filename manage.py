@@ -62,7 +62,7 @@ def create_test_data():
     :return:
     """
     with main_app_create_engine.connect() as con:
-        con.execute('INSERT INTO user (username, age, sex,  is_delete)VALUES ("李白", 20, "男", 0)')
+        con.execute('INSERT INTO user (username, age, sex,  is_delete)VALUES ("libai", 20, "man", 0)')
 
 
 def create_app(env_name):
