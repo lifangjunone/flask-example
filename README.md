@@ -44,17 +44,51 @@
       - ```shell
         sudo docker-compose -f deploy/docker-compose.yaml up
         ```
-   + 浏览器访问 http://{ip/domain}:8000/api/example_api/version
-      - 返回示例: 
+   + 浏览器访问 
+     + 1. http://127.0.0.1:8000/api/example_api/version
+        - 返回示例: 
+            - ```json
+                {
+                  "api_version": "v1",
+                  "production": "FlaskExample",
+                  "app_version": "",
+                  "application": "FlaskExample",
+                  "platform": "Linux-5.10.18-amd64-desktop-x86_64-with-glibc2.31"
+                 }
+               ```
+     + 2.  http://127.0.0.1:8000/api/example_api/user
+        - 返回示例：
           - ```json
-              {
-                "api_version": "v1",
-                "production": "FlaskExample",
-                "app_version": "",
-                "application": "FlaskExample",
-                "platform": "Linux-5.10.18-amd64-desktop-x86_64-with-glibc2.31"
-               }
-             ```
+            {
+               "msg": "Successful",
+               "code": 10000,
+               "data": [
+                   {
+                      "updated_at": "2022-10-21T18:06:55",
+                      "age": 20,
+                      "id": 1,
+                      "created_at": null,
+                      "sex": "man",
+                      "username": "libai"
+                   },
+                   {
+                      "updated_at": "2022-10-21T18:06:55",
+                      "age": 20,
+                      "id": 2,
+                      "created_at": null,
+                      "sex": "man",
+                      "username": "libai"
+                   },
+                   {
+                      "updated_at": "2022-10-21T18:06:55",
+                      "age": 20,
+                      "id": 3,
+                      "created_at": null,
+                      "sex": "man",
+                      "username": "libai"
+                   }]
+            }
+            ```
 
 
 
