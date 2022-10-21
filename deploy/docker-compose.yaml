@@ -1,9 +1,24 @@
 version: '3.7'
 services:
+  database:
+    image: mysql:5.7
+    container_name: mysql_flask_example
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - '3307:3306'
+    expose:
+      - '3307'
+    volumes:
+      - './mysql-data/db:/var/lib/mysql'
   backend:
     restart: always
     container_name: flask_example
-    image: lifangjunone/flask_example:v1.0.2
+    image: lifangjunone/flask_example:v1.0.4
     command: /bin/bash -c /usr/src/backend/deploy/start_server.sh
     tty: true
     ports:
@@ -19,18 +34,4 @@ services:
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_PORT=${MYSQL_PORT}
-  database:
-    image: mysql:5.7
-    container_name: mysql_flask_example
-    restart: always
-    environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
-    ports:
-      - '3307:3306'
-    expose:
-      - '3306'
-    volumes:
-      - './mysql-data/db:/var/lib/mysql'
+

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from flask_script import Manager, Server
+from flask_script import Manager, Server, Shell
 from flask_jwt_extended import jwt_required
 from flask import request, jsonify
 from apis import API_VERSION_MAPPING, VERSIONS_ALLOWED
@@ -123,8 +123,15 @@ def after_request(response):
     return response
 
 
+def make_shell_context():
+    return dict(app=app)
+
+
 # use Manage management app
 manager = Manager(app)
+
+# 命令行工具
+manager.add_command('shell', Shell(make_context=make_shell_context))
 # use JWTManager management JWT
 jwt = JWTManager(app)
 # Init middleware
