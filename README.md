@@ -1,4 +1,4 @@
-# flask-example ![CI status](https://img.shields.io/badge/build-passing-brightgreen.svg)
+# FlaskExample Web Framework ![CI status](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
 基于Flask Web框架的微服务骨架，后续的应用开发需要遵循此框架的示例规范
 
@@ -36,6 +36,30 @@
 ├── middleware                   # 中间件
 │   └── global_middleware.py          # 中间件使用示例
 ```
+
+## Quick start
+
+- 浏览器进入 hub.docker.com 复制 Docker pull image command
+  + 1, 进入仓库: https://hub.docker.com/repository/docker/lifangjunone/flask_example
+  + 2, 选择自己需要的版本, 建议选择最新版本
+  + 3, 复制:  docker pull lifangjunone/flask_example:{version}
+  + 4, 在自己本地运行该镜像:
+    - ```shell
+      sudo docker-compose -f deploy/docker-compose.yaml up
+      ```
+  + 5, 浏览器访问 http://{ip/domain}:8000/api/example_api/version
+    - ```json
+       {
+          "api_version": "v1",
+          "production": "FlaskExample",
+          "app_version": "",
+          "application": "FlaskExample",
+          "platform": "Linux-5.10.18-amd64-desktop-x86_64-with-glibc2.31"
+       }
+      ```
+
+
+
 
 ## 项目本地运行
 - pip install -r requirements.txt
