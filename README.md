@@ -2,7 +2,7 @@
 
 基于Flask Web框架的微服务骨架，后续的应用开发需要遵循此框架的示例规范
 
-**组织结构：**
+**Code structure：**
 
 ```text
 ├── bin                      # 可执行的脚本程序
@@ -39,29 +39,27 @@
 
 ## Quick start
 
-- 浏览器进入 hub.docker.com 复制 Docker pull image command
-  + 1, 进入仓库: https://hub.docker.com/repository/docker/lifangjunone/flask_example
-  + 2, 选择自己需要的版本, 建议选择最新版本
-  + 3, 复制:  docker pull lifangjunone/flask_example:{version}
-  + 4, 在自己本地运行该镜像:
-    - ```shell
-      sudo docker-compose -f deploy/docker-compose.yaml up
-      ```
-  + 5, 浏览器访问 http://{ip/domain}:8000/api/example_api/version
-    - ```json
-       {
-          "api_version": "v1",
-          "production": "FlaskExample",
-          "app_version": "",
-          "application": "FlaskExample",
-          "platform": "Linux-5.10.18-amd64-desktop-x86_64-with-glibc2.31"
-       }
-      ```
+- 说明: 该项目示例镜像已经push到dockerhub.com[镜像地址](https://hub.docker.com/repository/docker/lifangjunone/flask_example)
+   + 运行项目:
+      - ```shell
+        sudo docker-compose -f deploy/docker-compose.yaml up
+        ```
+   + 浏览器访问 http://{ip/domain}:8000/api/example_api/version
+      - 返回示例: 
+          - ```json
+              {
+                "api_version": "v1",
+                "production": "FlaskExample",
+                "app_version": "",
+                "application": "FlaskExample",
+                "platform": "Linux-5.10.18-amd64-desktop-x86_64-with-glibc2.31"
+               }
+             ```
 
 
 
 
-## 项目本地运行
+## Run in local
 - pip install -r requirements.txt
 - 运行项目
 - 浏览器访问： http://ip:port/api/v1/version
@@ -75,14 +73,14 @@
     "platform": "Linux-5.10.18-amd64-desktop-x86_64-with-Deepin-20.2.1-apricot"
     }
     ```
-## 安装
+## Install
 
 ### 环境要求
 * Linux
 * Python 3.5.2 and up
 
 
-## 使用
+## Usage
 ### 环境变量
 本服务应用的大部分配置都是通过环境变量和 Consul-K/V 来进行配置的，本地调试启动需要自行设定如下环境变量：
 
@@ -116,7 +114,7 @@ $ docker run --rm -p 8000:8000  -e "ENVIRONMENT=testing"   flask_example:v1.0.0
 $ docker run --rm -p 6379:6379 --name my-redis redis
 ```
 
-### 接口测试
+### Interface test
 ```
 $ http http://127.0.0.1:8000/api/example_api/version
 
@@ -124,7 +122,7 @@ $ http http://127.0.0.1:8000/api/example_api/version
 $ http http://127.0.0.1:8000/api/example_api/task/add
 ```
 
-### 数据库迁移
+### Database migration
 **创建数据库:**
 - `create database if not exists 'db_name' default character set utf8 collate utf8_general_ci;`
 
@@ -154,7 +152,7 @@ def create_app():
 - [自动生成迁移检测机制](http://alembic.zzzcomputing.com/en/latest/autogenerate.html#what-does-autogenerate-detect-and-what-does-it-not-detect)
 - [sqlite-alter-table](http://www.sqlitetutorial.net/sqlite-alter-table/)
 
-## 开发调试
+## Development and debugging
 ```bash
 $ virtualenv idl-venv
 $ . idl-venv/bin/activate
@@ -162,7 +160,7 @@ $ make install
 $ python manage.py runserver
 ```
 
-# 单元测试
+# Unit test
 ## pytest
 **测试样例发现规则:**  
 - 测试文件以 test_ 开头
@@ -197,7 +195,7 @@ $ python manage.py runserver
 - [后台运行] celery multi start w1 -A manage.celery --loglevel=debug
 
 
-## 部署服务详细步骤
+## Deploy service
 ### 启动后端服务
 
 ```shell script
