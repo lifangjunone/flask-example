@@ -1,0 +1,17 @@
+{
+  "name": "微服务骨架API接口文档示例",
+  "version": "1.0.0",
+  "description": "A Flask RESTful API example",
+  "title": "微服务骨架API接口文档示例",
+  "header": {
+    "filename": "apidocs-header.md"
+  },
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  },
+  "order": [
+    "Version",
+    "Users"
+  ]
+}

@@ -3,7 +3,7 @@ services:
   backend:
     restart: always
     container_name: flask_example
-    image: lifangjunone/flask_example:v1.0.0
+    image: lifangjunone/flask_example:v1.0.1
     command: /bin/bash -c /usr/src/backend/deploy/start_server.sh
     tty: true
     ports:

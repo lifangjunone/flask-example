@@ -1,7 +1,7 @@
 # Microservice skeleton
 # VERSION 1.0.0
 # MAINTAINER lifangjun <lifj@ebondhm.com>
-FROM python:3.10
+FROM python:3.9.9
 
 ENV LANG=C.UTF-8
 RUN apt-get update \
