@@ -41,9 +41,16 @@
 
 - 说明: 该项目示例镜像已经push到dockerhub.com[镜像地址](https://hub.docker.com/repository/docker/lifangjunone/flask_example)
    + 运行项目:
-      - ```shell
-        sudo docker-compose -f deploy/docker-compose.yaml up
-        ```
+      - 配置环境变量
+        - 1, 更改 ./deploy/.env 文件中的 MYSQL_HOST 值为自己本地IP地址
+        - 2, 执行一下命令
+           ```shell
+           source ./deploy/.env
+          ```
+      - 运行项目
+        - ```shell
+          sudo docker-compose -f deploy/docker-compose.yaml up
+          ```
    + 浏览器访问 
      + 1. http://127.0.0.1:8000/api/example_api/version
         - 返回示例: 
