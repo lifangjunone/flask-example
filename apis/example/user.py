@@ -31,3 +31,17 @@ class UserViewSet(Resource):
             print(str(e))
             return get_return_data(Unsuccessfully, {}, msg=str(e))
 
+    def put(self):
+        data = json.loads(request.data)
+        user_id = data.get("id")
+        try:
+            user = User.query.get(user_id)
+            user.username = data.get("username")
+            user.age = data.get("age")
+            user.sex = data.get("sex")
+            user.save()
+            data = UserSchema().dumps(user)
+            return get_return_data(Success, json.loads(data))
+        except Exception as e:
+            print(str(e))
+            return get_return_data(Unsuccessfully, {}, msg=str(e))
