@@ -5,6 +5,7 @@ from common.return_data import get_return_data, Success, Unsuccessfully
 from apis.models.user import User
 from apis.schemas.user import UserSchema
 import json
+_logger = logging.getLogger(__name__)
 
 
 class UserViewSet(Resource):
@@ -15,10 +16,14 @@ class UserViewSet(Resource):
         return get_return_data(Success, json.loads(user_info))
 
     def post(self):
-        data = json.loads(request.data)
-        user = User.create(**data)
-        data = UserSchema().dumps(user)
-        return get_return_data(Success, json.loads(data))
+        try:
+            data = json.loads(request.data)
+            user = User.create(**data)
+            data = UserSchema().dumps(user)
+            return get_return_data(Success, json.loads(data))
+        except Exception as e:
+            _logger.error("Create student is failed %s", str(e))
+            return get_return_data(Unsuccessfully, {}, msg=str(e))
 
     def delete(self):
         try:
@@ -28,7 +33,7 @@ class UserViewSet(Resource):
             user.save()
             return get_return_data(Success, {})
         except Exception as e:
-            print(str(e))
+            _logger.error("Delete student is failed %s", str(e))
             return get_return_data(Unsuccessfully, {}, msg=str(e))
 
     def put(self):
@@ -43,5 +48,5 @@ class UserViewSet(Resource):
             data = UserSchema().dumps(user)
             return get_return_data(Success, json.loads(data))
         except Exception as e:
-            print(str(e))
+            _logger.error(str(e))
             return get_return_data(Unsuccessfully, {}, msg=str(e))
