@@ -103,7 +103,7 @@
 ## Run in local
 - pip install -r requirements.txt
 - 运行项目
-- 浏览器访问： http://ip:port/api/v1/version
+- 浏览器访问： http://ip:port/api/example_api/version
 - 返回值：
   + ```json
     {
